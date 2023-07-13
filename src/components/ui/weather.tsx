@@ -5,32 +5,6 @@ import axios from "axios";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 
-// Function to convert city and state to coordinates
-const geocodeCityState = async (
-  city: string,
-  state: string
-): Promise<{ lat: number; lng: number }> => {
-  const address = `${city}, ${state}`;
-  const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
-
-  const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(
-    address
-  )}&key=${apiKey}`;
-
-  try {
-    const response = await axios.get(url);
-
-    if (response.data.results.length > 0) {
-      const { lat, lng } = response.data.results[0].geometry.location;
-      return { lat, lng };
-    } else {
-      throw new Error("No results found");
-    }
-  } catch (error) {
-    throw new Error("Geocoding request failed");
-  }
-};
-
 interface WeatherPeriod {
   temperature: number;
   shortForecast: string;
@@ -42,20 +16,70 @@ const WeatherWidget: React.FC = () => {
   const [currentPeriod, setCurrentPeriod] = useState<WeatherPeriod | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [city, setCity] = useState<string>(() => localStorage.getItem("city") || "");
-  const [state, setState] = useState<string>(() => localStorage.getItem("state") || "");
-  const [formSubmitted, setFormSubmitted] = useState<boolean>(() => {
-    const submitted = localStorage.getItem("formSubmitted");
-    return submitted === "true";
-  });
+  const [city, setCity] = useState<string>("");
+  const [state, setState] = useState<string>("");
+  const [formSubmitted, setFormSubmitted] = useState<boolean>(false);
 
   useEffect(() => {
-    // Save the city and state to local storage whenever they change
-    localStorage.setItem("city", city);
-    localStorage.setItem("state", state);
-    // Save the formSubmitted flag to local storage
-    localStorage.setItem("formSubmitted", String(formSubmitted));
+    if (typeof window !== "undefined") {
+      const localStorage = window.localStorage;
+
+      // Retrieve city and state from local storage
+      const storedCity = localStorage.getItem("city");
+      const storedState = localStorage.getItem("state");
+      const storedFormSubmitted = localStorage.getItem("formSubmitted");
+
+      if (storedCity) {
+        setCity(storedCity);
+      }
+
+      if (storedState) {
+        setState(storedState);
+      }
+
+      if (storedFormSubmitted === "true") {
+        setFormSubmitted(true);
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const localStorage = window.localStorage;
+
+      // Save the city and state to local storage whenever they change
+      localStorage.setItem("city", city);
+      localStorage.setItem("state", state);
+      // Save the formSubmitted flag to local storage
+      localStorage.setItem("formSubmitted", String(formSubmitted));
+    }
   }, [city, state, formSubmitted]);
+
+  // Function to convert city and state to coordinates
+  const geocodeCityState = async (
+    city: string,
+    state: string
+  ): Promise<{ lat: number; lng: number }> => {
+    const address = `${city}, ${state}`;
+    const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
+
+    const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(
+      address
+    )}&key=${apiKey}`;
+
+    try {
+      const response = await axios.get(url);
+
+      if (response.data.results.length > 0) {
+        const { lat, lng } = response.data.results[0].geometry.location;
+        return { lat, lng };
+      } else {
+        throw new Error("No results found");
+      }
+    } catch (error) {
+      throw new Error("Geocoding request failed");
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -96,7 +120,7 @@ const WeatherWidget: React.FC = () => {
       const submitEvent = new Event("submit");
       handleSubmit(submitEvent as unknown as React.FormEvent);
     }
-  }, []);
+  }, [formSubmitted]);
 
   return (
     <div className="flex justify-end">

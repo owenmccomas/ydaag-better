@@ -1,7 +1,8 @@
-import { useSession } from "next-auth/react";
+import { useSession, signIn, signOut } from "next-auth/react";
 import { format } from "date-fns"
 import WeatherWidget from "./weather";
 import dynamic from "next/dynamic";
+import { Button } from "./button";
 
 const DynamicDigitalClock = dynamic(
     () => import("./DigitalClock"),
@@ -13,7 +14,7 @@ const DynamicDigitalClock = dynamic(
 export default function UserTitle() {
     const user = useSession().data?.user;
 
-  if (user)
+  if (!user)
     return (
       <>
         <div className="mx-auto flex w-full justify-between">
@@ -31,6 +32,9 @@ export default function UserTitle() {
             </p>
           </div>
           <div className="ml-auto">
+
+            <Button onClick={() => signIn()}>Poo Poo</Button>
+            <Button onClick={() => signOut()}>Pee Pee</Button>
             <WeatherWidget />
           </div>
         </div>
