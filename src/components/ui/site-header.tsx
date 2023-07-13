@@ -1,7 +1,7 @@
-import { useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 
 import { siteConfig } from "config/site";
-import { buttonVariants } from "src/components/ui/button";
+import { Button, buttonVariants } from "src/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -38,9 +38,9 @@ export function SiteHeader() {
             <nav className="flex items-center space-x-1">
               <DropdownMenu>
                 <DropdownMenuTrigger
-                  className={buttonVariants({ variant: "outline" })}
+                  className={buttonVariants({ variant: "link" })}
                 >
-                  Open
+                  Menu
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
                   <DropdownMenuLabel>My Account</DropdownMenuLabel>
@@ -53,6 +53,7 @@ export function SiteHeader() {
                   <DropdownMenuItem>Subscription</DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
+              <Button variant='link' onClick={() => signOut()}>Sign Out</Button>
               {/* <ThemeToggle /> */}
             </nav>
           </div>

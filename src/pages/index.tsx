@@ -1,6 +1,8 @@
 import { signIn, signOut, useSession } from "next-auth/react";
 import Head from "next/head";
 import Link from "next/link";
+import LinkBar from "~/components/link-bar";
+import PomodoroTimer from "~/components/pomodoro";
 import { Button } from "~/components/ui/button";
 import { MainNav } from "~/components/ui/main-nav";
 import { SiteHeader } from "~/components/ui/site-header";
@@ -22,6 +24,7 @@ export default function Home() {
           <div className="flex h-full flex-col w-6/12 mx-auto mt-12 items-start justify-center ">
             <UserTitle />
             <div className="mt-2 w-3/12">
+              <LinkBar  />
               <Button onClick={() => alert("Poo Poo")}>Poo Poo</Button>
             </div>
           </div>

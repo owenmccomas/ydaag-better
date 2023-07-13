@@ -33,8 +33,6 @@ export default function UserTitle() {
             </p>
           </div>
           <div className="ml-auto">
-
-            <Button onClick={() => signOut()}>sign out</Button>
             <WeatherWidget />
           </div>
         </div>
