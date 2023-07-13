@@ -126,18 +126,18 @@ const WeatherWidget: React.FC = () => {
     <div className="flex justify-end">
       {formSubmitted ? (
         loading ? (
-          <div className="text-gray-500">Loading weather data...</div>
+          <div className="text-white">Loading weather data...</div>
         ) : error ? (
           <div className="text-red-500">{error}</div>
         ) : currentPeriod ? (
           <div className="space-y-2">
-            <div className="text-lg font-semibold">
+            <div className="text-lg text-white font-semibold">
               {currentPeriod.temperature}&deg;F
             </div>
-            <div>{currentPeriod.shortForecast}</div>
+            <div className="text-white">{currentPeriod.shortForecast}</div>
           </div>
         ) : (
-          <div className="text-gray-500">No weather data available</div>
+          <div className="text-white">No weather data available</div>
         )
       ) : (
         <form onSubmit={handleSubmit} className="p-1">

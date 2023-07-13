@@ -3,6 +3,7 @@ import { format } from "date-fns"
 import WeatherWidget from "./weather";
 import dynamic from "next/dynamic";
 import { Button } from "./button";
+import { MainNav } from "./main-nav";
 
 const DynamicDigitalClock = dynamic(
     () => import("./DigitalClock"),
@@ -17,7 +18,7 @@ export default function UserTitle() {
   if (user)
     return (
       <>
-        <div className="mx-auto flex w-full justify-between">
+        <div className="mx-auto flex w-full justify-between border-red-500 border">
           <div className="flex flex-col">
             <h1 className="text-3xl font-extrabold leading-tight tracking-tighter md:text-4xl text-white">
               Good Morning {user?.name?.split(" ")[0]},

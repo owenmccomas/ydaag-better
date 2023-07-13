@@ -14,11 +14,17 @@ export default function Home() {
         <meta name="description" content="Your Day at a Glance" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="flex min-h-screen flex-col items-center justify-center gap-10 bg-gradient-to-b from-[#000000] to-[#000000]">
-        <MainNav />
-        
-        <UserTitle />
-        <Button onClick={() => alert("Poo Poo")}>Poo Poo</Button>
+      <main className="w-screen bg-gradient-to-b from-[#000000] to-[#000000]">
+        <div className="mx-auto">
+          <MainNav />
+
+          <div className="flex h-screen flex-col w-6/12 mx-auto items-start justify-center ">
+            <UserTitle />
+            <div className="mt-2 w-3/12 border border-red-500">
+              <Button onClick={() => alert("Poo Poo")}>Poo Poo</Button>
+            </div>
+          </div>
+        </div>
       </main>
     </>
   );
