@@ -18,9 +18,9 @@ export default function UserTitle() {
   if (user)
     return (
       <>
-        <div className="mx-auto flex w-full justify-between border-red-500 border">
+        <div className="mx-auto flex w-full justify-between">
           <div className="flex flex-col">
-            <h1 className="text-3xl font-extrabold leading-tight tracking-tighter md:text-4xl text-white">
+            <h1 className="text-3xl font-extrabold leading-tight tracking-tighter md:text-4xl">
               Good Morning {user?.name?.split(" ")[0]},
               <br className="hidden sm:inline" />
               This is your day at a glance.
@@ -34,16 +34,16 @@ export default function UserTitle() {
           </div>
           <div className="ml-auto">
 
-            <Button onClick={() => signOut()}>Pee Pee</Button>
+            <Button onClick={() => signOut()}>sign out</Button>
             <WeatherWidget />
           </div>
         </div>
       </>
-    );
+    )
     return (
       <>
-     <p className="text-white">Not Logged In</p>
-    <Button onClick={() => signIn()}>log in</Button>);
+     <p>Not Logged In</p>
+    <Button onClick={() => signIn()}>log in</Button>
     </>
     )
 } 
