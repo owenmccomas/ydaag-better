@@ -1,12 +1,15 @@
 import { signIn, signOut, useSession } from "next-auth/react";
 import Head from "next/head";
 import Link from "next/link";
+import { TodoList } from "~/components/todos";
 import { Button } from "~/components/ui/button";
 import { MainNav } from "~/components/ui/main-nav";
 import UserTitle from "~/components/ui/title";
 import { api } from "~/utils/api";
 
 export default function Home() {
+  const { data: session } = useSession();
+
   return (
     <>
       <Head>
@@ -18,11 +21,12 @@ export default function Home() {
         <div className="mx-auto">
           <MainNav />
 
-          <div className="flex h-screen flex-col w-6/12 mx-auto items-start justify-center ">
+          <div className="mx-auto flex h-screen w-6/12 flex-col items-start justify-center ">
             <UserTitle />
             <div className="mt-2 w-3/12 border border-red-500">
               <Button onClick={() => alert("Poo Poo")}>Poo Poo</Button>
             </div>
+            {session && <TodoList userId={session?.user.id} />}
           </div>
         </div>
       </main>
