@@ -1,9 +1,7 @@
-"use client";
-
 import React, { useEffect, useState } from "react";
-import axios, { AxiosResponse } from "axios";
+import axios from "axios";
 import { Input } from "../ui/input";
-import { Button, ButtonProps } from "../ui/button";
+import { Button } from "../ui/button";
 
 interface WeatherPeriod {
   temperature: number;
@@ -13,9 +11,7 @@ interface WeatherPeriod {
 }
 
 const WeatherWidget: React.FC = () => {
-  const [currentPeriod, setCurrentPeriod] = useState<WeatherPeriod | null>(
-    null
-  );
+  const [currentPeriod, setCurrentPeriod] = useState<WeatherPeriod | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [city, setCity] = useState<string>("");
@@ -28,7 +24,6 @@ const WeatherWidget: React.FC = () => {
 
       const storedCity = localStorage.getItem("city");
       const storedState = localStorage.getItem("state");
-      const storedFormSubmitted = localStorage.getItem("formSubmitted");
 
       if (storedCity) {
         setCity(storedCity);
@@ -38,6 +33,7 @@ const WeatherWidget: React.FC = () => {
         setState(storedState);
       }
 
+      const storedFormSubmitted = localStorage.getItem("formSubmitted");
       if (storedFormSubmitted === "true") {
         setFormSubmitted(true);
       }
@@ -59,14 +55,14 @@ const WeatherWidget: React.FC = () => {
     state: string
   ): Promise<{ lat: number; lng: number }> => {
     const address = `${city}, ${state}`;
-    const apiKey: string = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || "";
+    const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
 
-    const url: string = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(
+    const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(
       address
     )}&key=${apiKey}`;
 
     try {
-      const response: AxiosResponse = await axios.get(url);
+      const response = await axios.get(url);
 
       if (response.data.results.length > 0) {
         const { lat, lng } = response.data.results[0].geometry.location;
@@ -79,7 +75,7 @@ const WeatherWidget: React.FC = () => {
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
@@ -87,21 +83,17 @@ const WeatherWidget: React.FC = () => {
     try {
       const { lat, lng } = await geocodeCityState(city, state);
 
-      const pointsResponse: AxiosResponse = await axios.get(
+      const pointsResponse = await axios.get(
         `https://api.weather.gov/points/${lat},${lng}`
       );
-      const forecastHourlyUrl: string =
-        pointsResponse.data.properties.forecastHourly;
-      const hourlyForecastResponse: AxiosResponse = await axios.get(
-        forecastHourlyUrl
-      );
-      const periods: WeatherPeriod[] =
-        hourlyForecastResponse.data.properties.periods;
-      const currentDateTime: Date = new Date();
+      const forecastHourlyUrl = pointsResponse.data.properties.forecastHourly;
+      const hourlyForecastResponse = await axios.get(forecastHourlyUrl);
+      const periods = hourlyForecastResponse.data.properties.periods;
+      const currentDateTime = new Date();
 
       for (const period of periods) {
-        const startTime: Date = new Date(period.startTime);
-        const endTime: Date = new Date(period.endTime);
+        const startTime = new Date(period.startTime);
+        const endTime = new Date(period.endTime);
 
         if (currentDateTime >= startTime && currentDateTime <= endTime) {
           setCurrentPeriod(period);
@@ -119,8 +111,8 @@ const WeatherWidget: React.FC = () => {
 
   useEffect(() => {
     if (formSubmitted) {
-      const submitEvent: unknown = new Event("submit");
-      handleSubmit(submitEvent as React.FormEvent);
+      const submitEvent = new Event('submit', { bubbles: true }) as any;
+      handleSubmit(submitEvent);
     }
   }, [formSubmitted]);
 
@@ -160,7 +152,7 @@ const WeatherWidget: React.FC = () => {
           <Button
             type="submit"
             className="rounded px-4 py-2 text-white"
-            variant={"outline"}
+            variant="outline"
           >
             Get Weather
           </Button>

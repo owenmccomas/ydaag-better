@@ -22,9 +22,9 @@ import {
 import { MainNav } from "src/components/ui/main-nav";
 // import { ThemeToggle } from "src/components/ui/theme-toggle";
 
-function openSheet() {
-  console.log("open sheet");
-}
+// function openSheet() {
+//   console.log("open sheet");
+// }
 
 export function SiteHeader() {
   const user = useSession().data?.user;
@@ -53,7 +53,9 @@ export function SiteHeader() {
                   <DropdownMenuItem>Subscription</DropdownMenuItem> */}
                 </DropdownMenuContent>
               </DropdownMenu>
-              <Button variant='link' onClick={() => signOut()}>Sign Out</Button>
+              <Button variant="link" onClick={() => signOut()}>
+                Sign Out
+              </Button>
               {/* <ThemeToggle /> */}
             </nav>
           </div>
@@ -64,9 +66,7 @@ export function SiteHeader() {
                 className="mx-auto rounded-full"
                 src={`${user?.image}`}
               />
-              <SheetTitle className="text-center">
-                {user?.name}
-              </SheetTitle>
+              <SheetTitle className="text-center">{user?.name}</SheetTitle>
             </SheetHeader>
             <SheetDescription className="align-bottom">
               {`We think you're pretty cool. Here some stuff about you`}

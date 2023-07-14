@@ -23,7 +23,7 @@ export const TodoList = ({ userId }: { userId: string }) => {
 
   const todos = api.todo.getTodos.useQuery(
     { userId },
-    { refetchOnMount: true }
+    { refetchOnMount: true },
   );
   const newTodo = api.todo.addTodo.useMutation();
   const deleteTodo = api.todo.deleteTodo.useMutation();
@@ -41,12 +41,11 @@ export const TodoList = ({ userId }: { userId: string }) => {
           // eslint-disable-next-line @typescript-eslint/no-floating-promises
           context.todo.invalidate();
         },
-      }
+      },
     );
     setTitleInput(""); // Reset the titleInput to an empty string
     setShowNewTodoModal(false);
   };
-  
 
   const deletefunc = () => {
     if (!selectedTodo?.id) return;
@@ -57,7 +56,7 @@ export const TodoList = ({ userId }: { userId: string }) => {
           // eslint-disable-next-line @typescript-eslint/no-floating-promises
           context.todo.invalidate();
         },
-      }
+      },
     );
     setSelectedTodo(undefined);
   };
@@ -71,7 +70,7 @@ export const TodoList = ({ userId }: { userId: string }) => {
           // eslint-disable-next-line @typescript-eslint/no-floating-promises
           context.todo.invalidate();
         },
-      }
+      },
     );
     setSelectedTodo(undefined);
   };
@@ -85,7 +84,7 @@ export const TodoList = ({ userId }: { userId: string }) => {
           // eslint-disable-next-line @typescript-eslint/no-floating-promises
           context.todo.invalidate();
         },
-      }
+      },
     );
     setSelectedTodo(undefined);
   };
@@ -95,11 +94,11 @@ export const TodoList = ({ userId }: { userId: string }) => {
       <Modal open={showNewTodoModal} setOpen={setShowNewTodoModal}>
         <div className="bg-fg rounded-xl p-5">
           <form onSubmit={submitNewTodo}>
-            <p className="mb-1 text-fg">Title your todo</p>
+            <p className="text-fg mb-1">Title your todo</p>
             <Input
               value={titleInput}
               onChange={(e) => setTitleInput(e.currentTarget.value)}
-              className="focus:border-1 border-gray-50 bg-bg text-foreground"
+              className="focus:border-1 bg-bg border-gray-50 text-foreground"
               type="text"
             />
           </form>
@@ -109,7 +108,7 @@ export const TodoList = ({ userId }: { userId: string }) => {
         open={Boolean(selectedTodo)}
         setOpen={() => setSelectedTodo(undefined)}
       >
-        <div className="w-48 rounded-xl bg-background pb-3 px-4 pt-2 ">
+        <div className="w-48 rounded-xl bg-background px-4 pb-3 pt-2 ">
           <p className="textforeground mb-2 text-center text-xl">
             {selectedTodo?.title}
           </p>
@@ -122,7 +121,7 @@ export const TodoList = ({ userId }: { userId: string }) => {
                 notes: e.currentTarget.value,
               })
             }
-            className="p-1 w-full rounded-md border border-black"
+            className="w-full rounded-md border border-black p-1"
             rows={4}
           />
         </div>
@@ -168,9 +167,9 @@ export const TodoList = ({ userId }: { userId: string }) => {
                   <TableCell>
                     {todo.completed ? (
                       <span className="uppercase text-destructive">closed</span>
-                      ) : (
-                        <span className="uppercase text-green-200">open</span>
-                        )}
+                    ) : (
+                      <span className="uppercase text-green-200">open</span>
+                    )}
                   </TableCell>
                   <TableCell className="text-fg truncate font-medium">
                     {todo.id}
@@ -181,7 +180,13 @@ export const TodoList = ({ userId }: { userId: string }) => {
                 </TableRow>
               );
             })}
-            <Button variant={'link'} onClick={() => setShowNewTodoModal(true)} className="text-2xl">+</Button>
+            <Button
+              variant={"link"}
+              onClick={() => setShowNewTodoModal(true)}
+              className="text-2xl"
+            >
+              +
+            </Button>
           </TableBody>
         </Table>
       )}

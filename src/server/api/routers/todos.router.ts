@@ -11,7 +11,7 @@ export const todosRouter = createTRPCRouter({
     .input(
       z.object({
         userId: z.string(),
-      })
+      }),
     )
     .query(async ({ input }) => {
       return await prisma.todo.findMany({
@@ -25,7 +25,7 @@ export const todosRouter = createTRPCRouter({
     .input(
       z.object({
         id: z.string(),
-      })
+      }),
     )
     .query(async ({ input }) => {
       return await prisma.todo.findUnique({
@@ -40,7 +40,7 @@ export const todosRouter = createTRPCRouter({
       z.object({
         userId: z.string(),
         title: z.string(),
-      })
+      }),
     )
     .mutation(async ({ input }) => {
       return await prisma.todo.create({
@@ -51,56 +51,51 @@ export const todosRouter = createTRPCRouter({
       });
     }),
 
-    deleteTodo: protectedProcedure
+  deleteTodo: protectedProcedure
     .input(
-        z.object({
-            id: z.string(),
-        })
+      z.object({
+        id: z.string(),
+      }),
     )
     .mutation(async ({ input }) => {
-        return await prisma.todo.delete({
-            where: {
-                id: input.id,
-            },
-        });
-    }
-    ),
-    archiveTodo: protectedProcedure
+      return await prisma.todo.delete({
+        where: {
+          id: input.id,
+        },
+      });
+    }),
+  archiveTodo: protectedProcedure
     .input(
-        z.object({
-            id: z.string(),
-        })
+      z.object({
+        id: z.string(),
+      }),
     )
     .mutation(async ({ input }) => {
-        return await prisma.todo.update({
-            where: {
-                id: input.id,
-            },
-            data: {
-                completed: true,
-            },
-        });
-    }
-    ),
+      return await prisma.todo.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          completed: true,
+        },
+      });
+    }),
 
-    updateTodoNote: protectedProcedure
+  updateTodoNote: protectedProcedure
     .input(
-        z.object({
-            id: z.string(),
-            note: z.string(),
-        })
+      z.object({
+        id: z.string(),
+        note: z.string(),
+      }),
     )
     .mutation(async ({ input }) => {
-        return await prisma.todo.update({
-            where: {
-                id: input.id,
-            },
-            data: {
-                notes: input.note,
-            },
-        });
-    }
-    ),
-    
-
+      return await prisma.todo.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          notes: input.note,
+        },
+      });
+    }),
 });

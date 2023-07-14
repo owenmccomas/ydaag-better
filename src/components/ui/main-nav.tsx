@@ -20,13 +20,13 @@ export function MainNav({ items }: MainNavProps) {
                 <p
                   className={cn(
                     "flex items-center text-sm font-medium text-muted-foreground",
-                    router.asPath === item.href && "text-fg"
+                    router.asPath === item.href && "text-fg",
                   )}
                 >
                   {item.title}
                 </p>
               </Link>
-            ) : null
+            ) : null,
           )}
         </nav>
       ) : null}
