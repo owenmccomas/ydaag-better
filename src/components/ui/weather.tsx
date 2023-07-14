@@ -151,7 +151,7 @@ const WeatherWidget: React.FC = () => {
           />
           <Button
             type="submit"
-            className="rounded px-4 py-2 text-white"
+            className="rounded px-4 py-2 text-fg"
             variant="outline"
           >
             Get Weather
