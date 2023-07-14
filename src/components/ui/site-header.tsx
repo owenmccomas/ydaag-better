@@ -48,9 +48,9 @@ export function SiteHeader() {
                   <DropdownMenuItem>
                     <SheetTrigger>Profile</SheetTrigger>
                   </DropdownMenuItem>
-                  <DropdownMenuItem>Billing</DropdownMenuItem>
+                  {/* <DropdownMenuItem>Billing</DropdownMenuItem>
                   <DropdownMenuItem>Team</DropdownMenuItem>
-                  <DropdownMenuItem>Subscription</DropdownMenuItem>
+                  <DropdownMenuItem>Subscription</DropdownMenuItem> */}
                 </DropdownMenuContent>
               </DropdownMenu>
               <Button variant='link' onClick={() => signOut()}>Sign Out</Button>

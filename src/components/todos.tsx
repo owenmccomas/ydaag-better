@@ -43,8 +43,10 @@ export const TodoList = ({ userId }: { userId: string }) => {
         },
       }
     );
+    setTitleInput(""); // Reset the titleInput to an empty string
     setShowNewTodoModal(false);
   };
+  
 
   const deletefunc = () => {
     if (!selectedTodo?.id) return;

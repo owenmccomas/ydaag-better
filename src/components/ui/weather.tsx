@@ -130,7 +130,7 @@ const WeatherWidget: React.FC = () => {
         loading ? (
           <div className="text-fg">Loading weather data...</div>
         ) : error ? (
-          <div className="text-red-500">{error}</div>
+          <div className="text-fg">{error} :/</div>
         ) : currentPeriod ? (
           <div className="space-y-2">
             <div className="text-lg font-semibold text-fg">
@@ -148,14 +148,14 @@ const WeatherWidget: React.FC = () => {
             placeholder="Enter city"
             value={city}
             onChange={(e) => setCity(e.target.value)}
-            className="rounded border border-gray-300 p-2"
+            className="rounded border border-gray-300 p-2 bg-bg text-fg"
           />
           <Input
             type="text"
             placeholder="Enter state"
             value={state}
             onChange={(e) => setState(e.target.value)}
-            className="rounded border border-gray-300 p-2"
+            className="rounded border border-gray-300 p-2 bg-bg text-fg"
           />
           <Button
             type="submit"
