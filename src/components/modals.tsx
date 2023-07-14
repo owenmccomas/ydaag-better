@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React from "react";
 
-interface ModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-}
+// interface ModalProps {
+//   isOpen: boolean;
+//   onClose: () => void;
+// }
 
 const Modal = ({
   open,

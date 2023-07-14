@@ -14,13 +14,13 @@ import {
   Sheet,
   SheetContent,
   SheetDescription,
-  SheetFooter,
+  // SheetFooter,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
 } from "src/components/ui/sheet";
 import { MainNav } from "src/components/ui/main-nav";
-import { ThemeToggle } from "src/components/ui/theme-toggle";
+// import { ThemeToggle } from "src/components/ui/theme-toggle";
 
 function openSheet() {
   console.log("open sheet");

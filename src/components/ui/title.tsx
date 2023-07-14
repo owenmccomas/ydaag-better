@@ -2,8 +2,8 @@ import { useSession, signIn, signOut } from "next-auth/react";
 import { format } from "date-fns";
 import WeatherWidget from "./weather";
 import dynamic from "next/dynamic";
-import { Button } from "./button";
-import { MainNav } from "./main-nav";
+// import { Button } from "./button";
+// import { MainNav } from "./main-nav";
 
 const DynamicDigitalClock = dynamic(() => import("./DigitalClock"), {
   ssr: false,

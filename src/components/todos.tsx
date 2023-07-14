@@ -9,7 +9,7 @@ import {
   TableRow,
 } from "./ui/table";
 import { Button } from "./ui/button";
-import { type FormEvent, useEffect, useState } from "react";
+import { type FormEvent, useState } from "react";
 import Modal from "./modals";
 import { Input } from "./ui/input";
 import { format } from "date-fns";

@@ -1,9 +1,9 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 import { Input } from "../ui/input";
-import { Button } from "../ui/button";
+import { Button, ButtonProps } from "../ui/button";
 
 interface WeatherPeriod {
   temperature: number;
@@ -26,7 +26,6 @@ const WeatherWidget: React.FC = () => {
     if (typeof window !== "undefined") {
       const localStorage = window.localStorage;
 
-      // Retrieve city and state from local storage
       const storedCity = localStorage.getItem("city");
       const storedState = localStorage.getItem("state");
       const storedFormSubmitted = localStorage.getItem("formSubmitted");
@@ -49,28 +48,25 @@ const WeatherWidget: React.FC = () => {
     if (typeof window !== "undefined") {
       const localStorage = window.localStorage;
 
-      // Save the city and state to local storage whenever they change
       localStorage.setItem("city", city);
       localStorage.setItem("state", state);
-      // Save the formSubmitted flag to local storage
       localStorage.setItem("formSubmitted", String(formSubmitted));
     }
   }, [city, state, formSubmitted]);
 
-  // Function to convert city and state to coordinates
   const geocodeCityState = async (
     city: string,
     state: string
   ): Promise<{ lat: number; lng: number }> => {
     const address = `${city}, ${state}`;
-    const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
+    const apiKey: string = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || "";
 
-    const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(
+    const url: string = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(
       address
     )}&key=${apiKey}`;
 
     try {
-      const response = await axios.get(url);
+      const response: AxiosResponse = await axios.get(url);
 
       if (response.data.results.length > 0) {
         const { lat, lng } = response.data.results[0].geometry.location;
@@ -91,17 +87,21 @@ const WeatherWidget: React.FC = () => {
     try {
       const { lat, lng } = await geocodeCityState(city, state);
 
-      const pointsResponse = await axios.get(
+      const pointsResponse: AxiosResponse = await axios.get(
         `https://api.weather.gov/points/${lat},${lng}`
       );
-      const forecastHourlyUrl = pointsResponse.data.properties.forecastHourly;
-      const hourlyForecastResponse = await axios.get(forecastHourlyUrl);
-      const periods = hourlyForecastResponse.data.properties.periods;
-      const currentDateTime = new Date();
+      const forecastHourlyUrl: string =
+        pointsResponse.data.properties.forecastHourly;
+      const hourlyForecastResponse: AxiosResponse = await axios.get(
+        forecastHourlyUrl
+      );
+      const periods: WeatherPeriod[] =
+        hourlyForecastResponse.data.properties.periods;
+      const currentDateTime: Date = new Date();
 
       for (const period of periods) {
-        const startTime = new Date(period.startTime);
-        const endTime = new Date(period.endTime);
+        const startTime: Date = new Date(period.startTime);
+        const endTime: Date = new Date(period.endTime);
 
         if (currentDateTime >= startTime && currentDateTime <= endTime) {
           setCurrentPeriod(period);
@@ -119,8 +119,8 @@ const WeatherWidget: React.FC = () => {
 
   useEffect(() => {
     if (formSubmitted) {
-      const submitEvent = new Event("submit");
-      handleSubmit(submitEvent as unknown as React.FormEvent);
+      const submitEvent: unknown = new Event("submit");
+      handleSubmit(submitEvent as React.FormEvent);
     }
   }, [formSubmitted]);
 

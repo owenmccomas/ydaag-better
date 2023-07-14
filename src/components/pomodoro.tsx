@@ -3,8 +3,8 @@
 import React, { useEffect, useState } from "react";
 
 import { Button } from "./ui/button";
-import { Progress } from "./ui/progress";
-import { Switch } from "./ui/switch";
+// import { Progress } from "./ui/progress";
+// import { Switch } from "./ui/switch";
 
 interface PomodoroTimerProps {
   initialTime: number;
@@ -13,7 +13,7 @@ interface PomodoroTimerProps {
 const PomodoroTimer: React.FC<PomodoroTimerProps> = ({ initialTime }) => {
   const [timeLeft, setTimeLeft] = useState(initialTime * 60);
   const [isPaused, setIsPaused] = useState(false);
-  const [showProg, setShowProg] = useState<boolean>(false);
+  // const [showProg, setShowProg] = useState<boolean>(false);
 
   useEffect(() => {
     if (!isPaused && timeLeft > 0) {

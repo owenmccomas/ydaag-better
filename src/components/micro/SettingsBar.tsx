@@ -1,5 +1,5 @@
-import { Archive, Trash2, Rows } from "lucide-react"
-import { useRouter } from "next/router"
+import { Archive, Trash2 } from "lucide-react"
+// import { useRouter } from "next/router"
 import React from "react"
 
 export const SettingsBar = ({
