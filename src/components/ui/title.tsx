@@ -1,19 +1,16 @@
 import { useSession, signIn, signOut } from "next-auth/react";
-import { format } from "date-fns"
+import { format } from "date-fns";
 import WeatherWidget from "./weather";
 import dynamic from "next/dynamic";
 import { Button } from "./button";
 import { MainNav } from "./main-nav";
 
-const DynamicDigitalClock = dynamic(
-    () => import("./DigitalClock"),
-    {
-      ssr: false,
-    }
-  )
+const DynamicDigitalClock = dynamic(() => import("./DigitalClock"), {
+  ssr: false,
+});
 
 export default function UserTitle() {
-    const user = useSession().data?.user;
+  const user = useSession().data?.user;
 
   if (user)
     return (
@@ -29,7 +26,7 @@ export default function UserTitle() {
               {format(Date.now(), "MMMM d, yyyy")}
             </p>
             <p className="text-md text-muted-foreground">
-              <DynamicDigitalClock/>
+              <DynamicDigitalClock />
             </p>
           </div>
           <div className="ml-auto">
@@ -37,11 +34,11 @@ export default function UserTitle() {
           </div>
         </div>
       </>
-    )
-    return (
-      <>
-     <p>Not Logged In</p>
-    <Button onClick={() => signIn()}>log in</Button>
+    );
+  return (
+    <>
+      <p className="text-white">Not Logged In</p>
+      <Button onClick={() => signIn()}>log in</Button>);
     </>
-    )
-} 
+  );
+}

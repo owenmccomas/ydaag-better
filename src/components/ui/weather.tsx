@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import React, { useEffect, useState } from "react";
 import axios from "axios";
@@ -13,7 +13,9 @@ interface WeatherPeriod {
 }
 
 const WeatherWidget: React.FC = () => {
-  const [currentPeriod, setCurrentPeriod] = useState<WeatherPeriod | null>(null);
+  const [currentPeriod, setCurrentPeriod] = useState<WeatherPeriod | null>(
+    null
+  );
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [city, setCity] = useState<string>("");
@@ -131,7 +133,7 @@ const WeatherWidget: React.FC = () => {
           <div className="text-red-500">{error}</div>
         ) : currentPeriod ? (
           <div className="space-y-2">
-            <div className="text-lg text-white font-semibold">
+            <div className="text-lg font-semibold text-white">
               {currentPeriod.temperature}&deg;F
             </div>
             <div className="text-white">{currentPeriod.shortForecast}</div>
@@ -146,18 +148,18 @@ const WeatherWidget: React.FC = () => {
             placeholder="Enter city"
             value={city}
             onChange={(e) => setCity(e.target.value)}
-            className="p-2 border border-gray-300 rounded"
+            className="rounded border border-gray-300 p-2"
           />
           <Input
             type="text"
             placeholder="Enter state"
             value={state}
             onChange={(e) => setState(e.target.value)}
-            className="p-2 border border-gray-300 rounded"
+            className="rounded border border-gray-300 p-2"
           />
           <Button
             type="submit"
-            className="px-4 py-2 text-white rounded"
+            className="rounded px-4 py-2 text-white"
             variant={"outline"}
           >
             Get Weather

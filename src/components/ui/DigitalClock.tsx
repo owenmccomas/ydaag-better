@@ -1,14 +1,14 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 
 const DigitalClock = () => {
-  const [currentTime, setCurrentTime] = useState('');
+  const [currentTime, setCurrentTime] = useState("");
 
   useEffect(() => {
     const interval = setInterval(() => {
       const date = new Date();
-      const hours = date.getHours().toString().padStart(2, '0');
-      const minutes = date.getMinutes().toString().padStart(2, '0');
-      const seconds = date.getSeconds().toString().padStart(2, '0');
+      const hours = date.getHours().toString().padStart(2, "0");
+      const minutes = date.getMinutes().toString().padStart(2, "0");
+      const seconds = date.getSeconds().toString().padStart(2, "0");
       setCurrentTime(`${hours}:${minutes}:${seconds}`);
     }, 1000);
 
@@ -17,7 +17,7 @@ const DigitalClock = () => {
     };
   }, []);
 
-  if (typeof window === 'undefined') {
+  if (typeof window === "undefined") {
     // Render a placeholder or loading state on the server
     return <div>Loading...</div>;
   }
