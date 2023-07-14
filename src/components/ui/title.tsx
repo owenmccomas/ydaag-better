@@ -11,8 +11,6 @@ const DynamicDigitalClock = dynamic(() => import("./DigitalClock"), {
 
 export default function UserTitle() {
   const user = useSession().data?.user;
-
-  if (user)
     return (
       <>
         <div className="mx-auto flex w-full justify-between">
@@ -35,10 +33,4 @@ export default function UserTitle() {
         </div>
       </>
     );
-  return (
-    <>
-      <p className="text-white">Not Logged In</p>
-      <Button onClick={() => signIn()}>log in</Button>
-    </>
-  );
 }

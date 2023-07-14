@@ -1,37 +1,43 @@
-import { signIn, signOut, useSession } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import Head from "next/head";
-import Link from "next/link";
 import { TodoList } from "~/components/todos";
-import { Button } from "~/components/ui/button";
-import { MainNav } from "~/components/ui/main-nav";
 import { SiteHeader } from "~/components/ui/site-header";
 import UserTitle from "~/components/ui/title";
 import LinkBar from "~/components/link-bar";
-import { api } from "~/utils/api";
+import { Button } from "~/components/ui/button";
 
 export default function Home() {
   const { data: session } = useSession();
+  const user = useSession().data?.user;
+  if (user)
+    return (
+      <>
+        <Head>
+          <title>YDAAG</title>
+          <meta name="description" content="Your Day at a Glance" />
+          <link rel="icon" href="/favicon.ico" />
+        </Head>
+        <main className="w-full bg-background">
+          <div className="mx-auto flex h-screen flex-col items-start justify-start">
+            <SiteHeader />
+            <div className="mx-auto mt-10 w-6/12">
+              <UserTitle />
+              <div className="mt-2">
+                <LinkBar />
+              </div>
+              {session && <TodoList userId={session?.user.id} />}
+            </div>
+          </div>
+        </main>
+      </>
+    );
 
   return (
-    <>
-      <Head>
-        <title>YDAAG</title>
-        <meta name="description" content="Your Day at a Glance" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-      <main className="w-full bg-background">
-        <div className="mx-auto">
-          <SiteHeader />
-
-          <div className="mx-auto flex h-screen w-6/12 flex-col items-start justify-center ">
-            <UserTitle />
-            <div className="mt-2 w-3/12">
-              <LinkBar  />
-            </div>
-            {session && <TodoList userId={session?.user.id} />}
-          </div>
-        </div>
-      </main>
-    </>
+    <div className="flex h-screen items-center justify-center">
+      <div className="text-center">
+        <p className="text-fg mb-4">Not Logged In</p>
+        <Button onClick={() => signIn()}>Sign In</Button>
+      </div>
+    </div>
   );
 }

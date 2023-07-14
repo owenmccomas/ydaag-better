@@ -30,62 +30,74 @@ export const TodoList = ({ userId }: { userId: string }) => {
   const archiveTodo = api.todo.archiveTodo.useMutation();
   const updateNote = api.todo.updateTodoNote.useMutation();
 
-  const context = api.useContext()
+  const context = api.useContext();
 
   const submitNewTodo = (e: FormEvent) => {
     e.preventDefault();
-    newTodo.mutate({ userId, title: titleInput }, {
-      onSuccess: () => {
-        // eslint-disable-next-line @typescript-eslint/no-floating-promises
-        context.todo.invalidate()
+    newTodo.mutate(
+      { userId, title: titleInput },
+      {
+        onSuccess: () => {
+          // eslint-disable-next-line @typescript-eslint/no-floating-promises
+          context.todo.invalidate();
+        },
       }
-    } );
+    );
     setShowNewTodoModal(false);
   };
 
   const deletefunc = () => {
-    if (!selectedTodo?.id) return
-    deleteTodo.mutate({ id: selectedTodo?.id }, {
-      onSuccess: () => {
-        // eslint-disable-next-line @typescript-eslint/no-floating-promises
-        context.todo.invalidate()
+    if (!selectedTodo?.id) return;
+    deleteTodo.mutate(
+      { id: selectedTodo?.id },
+      {
+        onSuccess: () => {
+          // eslint-disable-next-line @typescript-eslint/no-floating-promises
+          context.todo.invalidate();
+        },
       }
-    } );
+    );
     setSelectedTodo(undefined);
-  }
+  };
 
   const archivefunc = () => {
-    if (!selectedTodo?.id) return
-    archiveTodo.mutate({ id: selectedTodo?.id}, {
-      onSuccess: () => {
-        // eslint-disable-next-line @typescript-eslint/no-floating-promises
-        context.todo.invalidate()
+    if (!selectedTodo?.id) return;
+    archiveTodo.mutate(
+      { id: selectedTodo?.id },
+      {
+        onSuccess: () => {
+          // eslint-disable-next-line @typescript-eslint/no-floating-promises
+          context.todo.invalidate();
+        },
       }
-    } );
+    );
     setSelectedTodo(undefined);
-  }
+  };
 
   const updateNotes = () => {
-    if (!selectedTodo?.notes) return
-    updateNote.mutate({ id: selectedTodo?.id, note: selectedTodo?.notes }, {
-      onSuccess: () => {
-        // eslint-disable-next-line @typescript-eslint/no-floating-promises
-        context.todo.invalidate()
+    if (!selectedTodo?.notes) return;
+    updateNote.mutate(
+      { id: selectedTodo?.id, note: selectedTodo?.notes },
+      {
+        onSuccess: () => {
+          // eslint-disable-next-line @typescript-eslint/no-floating-promises
+          context.todo.invalidate();
+        },
       }
-    } );
+    );
     setSelectedTodo(undefined);
-  }
+  };
 
   return (
     <div className="mt-0 w-9/12 rounded-xl border border-gray-100 border-opacity-30 pt-0">
       <Modal open={showNewTodoModal} setOpen={setShowNewTodoModal}>
-        <div className="rounded-xl bg-foreground p-5">
+        <div className="bg-fg rounded-xl p-5">
           <form onSubmit={submitNewTodo}>
-            <p className="mb-1 text-primary-foreground">Title your todo</p>
+            <p className="mb-1 text-foreground">Title your todo</p>
             <Input
               value={titleInput}
               onChange={(e) => setTitleInput(e.currentTarget.value)}
-              className="focus:border-1 border-gray-50 bg-foreground text-primary-foreground"
+              className="focus:border-1 border-gray-50 bg-foreground text-foreground"
               type="text"
             />
           </form>
@@ -95,9 +107,22 @@ export const TodoList = ({ userId }: { userId: string }) => {
         open={Boolean(selectedTodo)}
         setOpen={() => setSelectedTodo(undefined)}
       >
-        <div className="rounded-xl bg-gray-200 p-5 h-96 w-48 ">
-            <p className="text-xl text-center text-primary-foreground">{selectedTodo?.title}</p>
-            <textarea onBlur={updateNotes} value={selectedTodo?.notes || ''} onChange={(e)=>setSelectedTodo({...selectedTodo!, notes: e.currentTarget.value })} className="w-full" rows={4} />
+        <div className="w-48 rounded-xl bg-background pb-3 px-4 pt-2 ">
+          <p className="textforeground mb-2 text-center text-xl">
+            {selectedTodo?.title}
+          </p>
+          <textarea
+            onBlur={updateNotes}
+            value={selectedTodo?.notes || ""}
+            onChange={(e) =>
+              setSelectedTodo({
+                ...selectedTodo!,
+                notes: e.currentTarget.value,
+              })
+            }
+            className="p-1 w-full rounded-md border border-black"
+            rows={4}
+          />
         </div>
         <SettingsBar archivefunc={archivefunc} deletefunc={deletefunc} />
       </Modal>
@@ -112,7 +137,11 @@ export const TodoList = ({ userId }: { userId: string }) => {
       {todos.data?.length === 0 ? (
         <div className="flex h-24 flex-col items-center justify-between">
           <p className="text-center text-foreground">{`Looks like you don't have any todos`}</p>
-          <Button variant={'outline'} className="mx-auto" onClick={() => setShowNewTodoModal(true)}>
+          <Button
+            variant={"outline"}
+            className="mx-auto"
+            onClick={() => setShowNewTodoModal(true)}
+          >
             Start using Todos
           </Button>
         </div>
@@ -130,11 +159,23 @@ export const TodoList = ({ userId }: { userId: string }) => {
           <TableBody>
             {todos.data?.map((todo) => {
               return (
-                <TableRow onClick={()=>setSelectedTodo(todo)} key={todo.id}>
-                  <TableCell className="font-medium text-fg">{todo.title}</TableCell>
-                  <TableCell>{todo.completed ? <span className="text-destructive uppercase">closed</span> : <span className="text-green-200 uppercase">open</span>}</TableCell>
-                  <TableCell className="font-medium truncate text-fg">{todo.id}</TableCell>
-                  <TableCell className="float-right text-fg">{format(todo.createdAt, "MMMM d, yyyy")}</TableCell>
+                <TableRow onClick={() => setSelectedTodo(todo)} key={todo.id}>
+                  <TableCell className="text-fg font-medium">
+                    {todo.title}
+                  </TableCell>
+                  <TableCell>
+                    {todo.completed ? (
+                      <span className="uppercase text-destructive">closed</span>
+                    ) : (
+                      <span className="uppercase text-green-200">open</span>
+                    )}
+                  </TableCell>
+                  <TableCell className="text-fg truncate font-medium">
+                    {todo.id}
+                  </TableCell>
+                  <TableCell className="text-fg float-right">
+                    {format(todo.createdAt, "MMMM d, yyyy")}
+                  </TableCell>
                 </TableRow>
               );
             })}
