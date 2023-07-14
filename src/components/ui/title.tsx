@@ -38,7 +38,7 @@ export default function UserTitle() {
   return (
     <>
       <p className="text-white">Not Logged In</p>
-      <Button onClick={() => signIn()}>log in</Button>);
+      <Button onClick={() => signIn()}>log in</Button>
     </>
   );
 }

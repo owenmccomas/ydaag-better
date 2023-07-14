@@ -27,7 +27,6 @@ export default function Home() {
             <UserTitle />
             <div className="mt-2 w-3/12">
               <LinkBar  />
-              <Button onClick={() => alert("Poo Poo")}>Poo Poo</Button>
             </div>
             {session && <TodoList userId={session?.user.id} />}
           </div>

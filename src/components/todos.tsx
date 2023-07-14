@@ -77,7 +77,7 @@ export const TodoList = ({ userId }: { userId: string }) => {
   }
 
   return (
-    <div className="mt-5 w-9/12 rounded-xl border border-gray-100 border-opacity-30 p-10 pt-0">
+    <div className="mt-0 w-9/12 rounded-xl border border-gray-100 border-opacity-30 pt-0">
       <Modal open={showNewTodoModal} setOpen={setShowNewTodoModal}>
         <div className="rounded-xl bg-foreground p-5">
           <form onSubmit={submitNewTodo}>
@@ -111,8 +111,8 @@ export const TodoList = ({ userId }: { userId: string }) => {
 
       {todos.data?.length === 0 ? (
         <div className="flex h-24 flex-col items-center justify-between">
-          <p className="text-center text-primary-foreground">{`Looks like you don't have any todos`}</p>
-          <Button className="mx-auto" onClick={() => setShowNewTodoModal(true)}>
+          <p className="text-center text-foreground">{`Looks like you don't have any todos`}</p>
+          <Button variant={'outline'} className="mx-auto" onClick={() => setShowNewTodoModal(true)}>
             Start using Todos
           </Button>
         </div>
@@ -131,10 +131,10 @@ export const TodoList = ({ userId }: { userId: string }) => {
             {todos.data?.map((todo) => {
               return (
                 <TableRow onClick={()=>setSelectedTodo(todo)} key={todo.id}>
-                  <TableCell className="font-medium">{todo.title}</TableCell>
+                  <TableCell className="font-medium text-fg">{todo.title}</TableCell>
                   <TableCell>{todo.completed ? <span className="text-destructive uppercase">closed</span> : <span className="text-green-200 uppercase">open</span>}</TableCell>
-                  <TableCell className="font-medium truncate">{todo.id}</TableCell>
-                  <TableCell className="float-right">{format(todo.createdAt, "MMMM d, yyyy")}</TableCell>
+                  <TableCell className="font-medium truncate text-fg">{todo.id}</TableCell>
+                  <TableCell className="float-right text-fg">{format(todo.createdAt, "MMMM d, yyyy")}</TableCell>
                 </TableRow>
               );
             })}
