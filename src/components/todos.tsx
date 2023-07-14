@@ -93,11 +93,11 @@ export const TodoList = ({ userId }: { userId: string }) => {
       <Modal open={showNewTodoModal} setOpen={setShowNewTodoModal}>
         <div className="bg-fg rounded-xl p-5">
           <form onSubmit={submitNewTodo}>
-            <p className="mb-1 text-foreground">Title your todo</p>
+            <p className="mb-1 text-fg">Title your todo</p>
             <Input
               value={titleInput}
               onChange={(e) => setTitleInput(e.currentTarget.value)}
-              className="focus:border-1 border-gray-50 bg-foreground text-foreground"
+              className="focus:border-1 border-gray-50 bg-bg text-foreground"
               type="text"
             />
           </form>
@@ -166,9 +166,9 @@ export const TodoList = ({ userId }: { userId: string }) => {
                   <TableCell>
                     {todo.completed ? (
                       <span className="uppercase text-destructive">closed</span>
-                    ) : (
-                      <span className="uppercase text-green-200">open</span>
-                    )}
+                      ) : (
+                        <span className="uppercase text-green-200">open</span>
+                        )}
                   </TableCell>
                   <TableCell className="text-fg truncate font-medium">
                     {todo.id}
@@ -179,6 +179,7 @@ export const TodoList = ({ userId }: { userId: string }) => {
                 </TableRow>
               );
             })}
+            <Button variant={'link'} onClick={() => setShowNewTodoModal(true)} className="text-2xl">+</Button>
           </TableBody>
         </Table>
       )}
