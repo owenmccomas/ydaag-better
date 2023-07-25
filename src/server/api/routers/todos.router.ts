@@ -18,6 +18,7 @@ export const todosRouter = createTRPCRouter({
         where: {
           userId: input.userId,
         },
+        orderBy: { createdAt: "desc" },
       });
     }),
 
@@ -98,4 +99,23 @@ export const todosRouter = createTRPCRouter({
         },
       });
     }),
+
+  updateCompleted: protectedProcedure
+    .input(
+      z.object({
+        id: z.string(),
+        completed: z.boolean(),
+      }),
+    )
+    .mutation(async ({ input }) => {
+      return await prisma.todo.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          completed: input.completed,
+        },
+      });
+    }
+  ),  
 });

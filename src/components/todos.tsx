@@ -15,6 +15,7 @@ import { Input } from "./ui/input";
 import { format } from "date-fns";
 import { type Todo } from "@prisma/client";
 import { SettingsBar } from "./micro/SettingsBar";
+import { Checkbox } from "./ui/checkbox";
 
 export const TodoList = ({ userId }: { userId: string }) => {
   const [showNewTodoModal, setShowNewTodoModal] = useState<boolean>(false);
@@ -23,14 +24,70 @@ export const TodoList = ({ userId }: { userId: string }) => {
 
   const todos = api.todo.getTodos.useQuery(
     { userId },
-    { refetchOnMount: true },
+    { refetchOnMount: true }
   );
   const newTodo = api.todo.addTodo.useMutation();
   const deleteTodo = api.todo.deleteTodo.useMutation();
   const archiveTodo = api.todo.archiveTodo.useMutation();
   const updateNote = api.todo.updateTodoNote.useMutation();
+  const updateCompleted = api.todo.updateCompleted.useMutation();
 
   const context = api.useContext();
+
+  const handleCheckboxClick = async (id: string, completed: boolean) => {
+    console.log("handleCheckboxClick called");
+
+    // Update the local state immediately
+    setSelectedTodo((prevTodo) => {
+      if (!prevTodo || prevTodo.id !== id) return prevTodo;
+      return {
+        ...prevTodo,
+        completed: !completed,
+      };
+    });
+
+    try {
+      // Perform the API call asynchronously after updating the local state
+      console.log("Before API call");
+      await updateCompleted.mutateAsync(
+        { id, completed: !completed },
+        {
+          onSuccess: () => {
+            // Invalidate the context after successful API call
+            context.todo.invalidate();
+          },
+          onError: (error) => {
+            // If the API call fails, revert the local state back to the original value
+            setSelectedTodo((prevTodo) => {
+              if (!prevTodo || prevTodo.id !== id) return prevTodo;
+              return {
+                ...prevTodo,
+                completed: completed,
+              };
+            });
+            console.error("Error updating completed status:", error);
+          },
+        }
+      );
+      console.log("After API call");
+    } catch (error) {
+      // Handle errors if needed
+      console.error("Error updating completed status:", error);
+    }
+  };
+
+  const updateCompletedFunc = async (id: string, completed: boolean) => {
+    try {
+      // Perform the API call to update the completed status
+      await updateCompleted.mutateAsync({ id, completed });
+
+      // After the API call is successful, invalidate the context
+      context.todo.invalidate();
+    } catch (error) {
+      // Handle errors if needed
+      console.error("Error updating completed status:", error);
+    }
+  };
 
   const submitNewTodo = (e: FormEvent) => {
     e.preventDefault();
@@ -41,7 +98,7 @@ export const TodoList = ({ userId }: { userId: string }) => {
           // eslint-disable-next-line @typescript-eslint/no-floating-promises
           context.todo.invalidate();
         },
-      },
+      }
     );
     setTitleInput(""); // Reset the titleInput to an empty string
     setShowNewTodoModal(false);
@@ -56,7 +113,7 @@ export const TodoList = ({ userId }: { userId: string }) => {
           // eslint-disable-next-line @typescript-eslint/no-floating-promises
           context.todo.invalidate();
         },
-      },
+      }
     );
     setSelectedTodo(undefined);
   };
@@ -70,7 +127,7 @@ export const TodoList = ({ userId }: { userId: string }) => {
           // eslint-disable-next-line @typescript-eslint/no-floating-promises
           context.todo.invalidate();
         },
-      },
+      }
     );
     setSelectedTodo(undefined);
   };
@@ -84,7 +141,7 @@ export const TodoList = ({ userId }: { userId: string }) => {
           // eslint-disable-next-line @typescript-eslint/no-floating-promises
           context.todo.invalidate();
         },
-      },
+      }
     );
     setSelectedTodo(undefined);
   };
@@ -151,35 +208,34 @@ export const TodoList = ({ userId }: { userId: string }) => {
           <TableCaption>A list of your Todos.</TableCaption>
           <TableHeader>
             <TableRow>
-              <TableHead className="w-[100px]">Title</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead>ID</TableHead>
+              <TableHead className="w-[30px]">Status</TableHead>
+              <TableHead>Title</TableHead>
               <TableHead className="text-right">Created</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {todos.data?.map((todo) => {
-              return (
-                <TableRow onClick={() => setSelectedTodo(todo)} key={todo.id}>
-                  <TableCell className="text-fg font-medium">
+            {todos.data?.map((todo) => (
+              <TableRow key={todo.id}>
+                <TableCell className="text-fg font-medium">
+                  <Checkbox
+                    checked={
+                      selectedTodo?.id === todo.id
+                        ? selectedTodo.completed
+                        : todo.completed
+                    }
+                    onClick={() => handleCheckboxClick(todo.id, todo.completed)}
+                  />
+                </TableCell>
+                <TableCell onClick={() => setSelectedTodo(todo)} key={todo.id}>
+                  <div className="max-w-[400px] font-medium text-black">
                     {todo.title}
-                  </TableCell>
-                  <TableCell>
-                    {todo.completed ? (
-                      <span className="uppercase text-destructive">closed</span>
-                    ) : (
-                      <span className="uppercase text-green-200">open</span>
-                    )}
-                  </TableCell>
-                  <TableCell className="text-fg truncate font-medium">
-                    {todo.id}
-                  </TableCell>
-                  <TableCell className="text-fg float-right">
-                    {format(todo.createdAt, "MMMM d, yyyy")}
-                  </TableCell>
-                </TableRow>
-              );
-            })}
+                  </div>
+                </TableCell>
+                <TableCell className="text-fg float-right">
+                  {format(todo.createdAt, "MMMM d, yyyy")}
+                </TableCell>
+              </TableRow>
+            ))}
             <Button
               variant={"link"}
               onClick={() => setShowNewTodoModal(true)}
