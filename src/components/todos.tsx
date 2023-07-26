@@ -16,6 +16,7 @@ import { format } from "date-fns";
 import { type Todo } from "@prisma/client";
 import { SettingsBar } from "./micro/SettingsBar";
 import { Checkbox } from "./ui/checkbox";
+import { Trash } from "lucide-react"
 
 export const TodoList = ({ userId }: { userId: string }) => {
   const [showNewTodoModal, setShowNewTodoModal] = useState<boolean>(false);
@@ -104,10 +105,9 @@ export const TodoList = ({ userId }: { userId: string }) => {
     setShowNewTodoModal(false);
   };
 
-  const deletefunc = () => {
-    if (!selectedTodo?.id) return;
+  const deletefunc = (todo: Todo) => {
     deleteTodo.mutate(
-      { id: selectedTodo?.id },
+      { id: todo.id },
       {
         onSuccess: () => {
           // eslint-disable-next-line @typescript-eslint/no-floating-promises
@@ -115,8 +115,8 @@ export const TodoList = ({ userId }: { userId: string }) => {
         },
       }
     );
-    setSelectedTodo(undefined);
   };
+  
 
   const archivefunc = () => {
     if (!selectedTodo?.id) return;
@@ -132,7 +132,8 @@ export const TodoList = ({ userId }: { userId: string }) => {
     setSelectedTodo(undefined);
   };
 
-  const updateNotes = () => {
+  const updateNotes = (e: FormEvent) => {
+    e.preventDefault();
     if (!selectedTodo?.notes) return;
     updateNote.mutate(
       { id: selectedTodo?.id, note: selectedTodo?.notes },
@@ -147,7 +148,7 @@ export const TodoList = ({ userId }: { userId: string }) => {
   };
 
   return (
-    <div className="mt-0 w-9/12 rounded-xl border border-gray-100 border-opacity-30 pt-0">
+    <div className="mt-0 rounded-xl border border-gray-100 border-opacity-30 pt-0">
       <Modal open={showNewTodoModal} setOpen={setShowNewTodoModal}>
         <div className="bg-fg rounded-xl p-5">
           <form onSubmit={submitNewTodo}>
@@ -155,7 +156,7 @@ export const TodoList = ({ userId }: { userId: string }) => {
             <Input
               value={titleInput}
               onChange={(e) => setTitleInput(e.currentTarget.value)}
-              className="focus:border-1 bg-bg border-gray-50 text-foreground"
+              className="focus:border-1 bg-bg border-gray-300 text-foreground"
               type="text"
             />
           </form>
@@ -165,24 +166,29 @@ export const TodoList = ({ userId }: { userId: string }) => {
         open={Boolean(selectedTodo)}
         setOpen={() => setSelectedTodo(undefined)}
       >
-        <div className="w-48 rounded-xl bg-background px-4 pb-3 pt-2 ">
-          <p className="textforeground mb-2 text-center text-xl">
-            {selectedTodo?.title}
-          </p>
-          <textarea
-            onBlur={updateNotes}
-            value={selectedTodo?.notes || ""}
-            onChange={(e) =>
-              setSelectedTodo({
-                ...selectedTodo!,
-                notes: e.currentTarget.value,
-              })
-            }
-            className="w-full rounded-md border border-black p-1"
-            rows={4}
-          />
+        <div className="rounded-lg bg-white">
+          <div className="px-6 py-4">
+            <p className="text-fg mb-4 text-center text-xl font-bold">
+              {selectedTodo?.title}
+            </p>
+            <textarea
+              onBlur={updateNotes}
+              value={selectedTodo?.notes || ""}
+              onChange={(e) =>
+                setSelectedTodo({
+                  ...selectedTodo!,
+                  notes: e.currentTarget.value,
+                })
+              }
+              className="w-full rounded-md border border-gray-300 p-2 focus:border-primary focus:outline-none"
+              rows={4}
+              placeholder="Add notes..."
+            />
+          </div>
+          {/* <div className="flex items-center justify-end rounded-b-lg bg-gray-100 px-4 py-3">
+            <SettingsBar archivefunc={archivefunc} deletefunc={deletefunc} />
+          </div> */}
         </div>
-        <SettingsBar archivefunc={archivefunc} deletefunc={deletefunc} />
       </Modal>
 
       <button
@@ -210,7 +216,8 @@ export const TodoList = ({ userId }: { userId: string }) => {
             <TableRow>
               <TableHead className="w-[30px]">Status</TableHead>
               <TableHead>Title</TableHead>
-              <TableHead className="text-right">Created</TableHead>
+              <TableHead>Created</TableHead>
+              <TableHead className="text-right">Delete</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -233,6 +240,11 @@ export const TodoList = ({ userId }: { userId: string }) => {
                 </TableCell>
                 <TableCell className="text-fg float-right">
                   {format(todo.createdAt, "MMMM d, yyyy")}
+                </TableCell>
+                <TableCell>
+                <Button variant={"ghost"} size={'sm'} className={'text-black float-right'} onClick={() => deletefunc(todo)}>
+                  <Trash />
+                  </Button>
                 </TableCell>
               </TableRow>
             ))}
