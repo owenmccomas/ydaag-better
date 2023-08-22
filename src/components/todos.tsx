@@ -216,7 +216,7 @@ export const TodoList = ({ userId }: { userId: string }) => {
             <TableRow>
               <TableHead className="w-[30px]">Status</TableHead>
               <TableHead>Title</TableHead>
-              <TableHead>Created</TableHead>
+              <TableHead className="text-right">Created</TableHead>
               <TableHead className="text-right">Delete</TableHead>
             </TableRow>
           </TableHeader>
