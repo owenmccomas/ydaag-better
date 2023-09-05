@@ -10,10 +10,8 @@ const DynamicDigitalClock = dynamic(() => import("./DigitalClock"), {
 export default function UserTitle() {
   const user = useSession().data?.user;
 
-  // Function to determine if the screen is small (e.g., mobile)
   const isMobileScreen = () => {
-    // Replace with the actual breakpoint size you want to use (e.g., 768px)
-    const breakpoint = 385;
+    const breakpoint = 1000;
     return window.innerWidth < breakpoint;
   };
 
