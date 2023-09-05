@@ -16,7 +16,7 @@ import { format } from "date-fns";
 import { type Todo } from "@prisma/client";
 import { SettingsBar } from "./micro/SettingsBar";
 import { Checkbox } from "./ui/checkbox";
-import { Trash } from "lucide-react"
+import { Trash } from "lucide-react";
 
 export const TodoList = ({ userId }: { userId: string }) => {
   const [showNewTodoModal, setShowNewTodoModal] = useState<boolean>(false);
@@ -54,7 +54,7 @@ export const TodoList = ({ userId }: { userId: string }) => {
         { id, completed: !completed },
         {
           onSuccess: () => {
-            // Invalidate the context after successful API call
+            // Invalidate the context after a successful API call
             context.todo.invalidate();
           },
           onError: (error) => {
@@ -116,7 +116,6 @@ export const TodoList = ({ userId }: { userId: string }) => {
       }
     );
   };
-  
 
   const archivefunc = () => {
     if (!selectedTodo?.id) return;
@@ -185,15 +184,13 @@ export const TodoList = ({ userId }: { userId: string }) => {
               placeholder="Add notes..."
             />
           </div>
-          {/* <div className="flex items-center justify-end rounded-b-lg bg-gray-100 px-4 py-3">
-            <SettingsBar archivefunc={archivefunc} deletefunc={deletefunc} />
-          </div> */}
         </div>
       </Modal>
 
+      {/* Conditionally render the "+" button only on large screens */}
       <button
         onClick={() => setShowNewTodoModal(true)}
-        className="-translate-x-7 text-primary-foreground"
+        className="fixed bottom-4 right-4 block flex h-14 w-14 items-center justify-center rounded-full bg-primary pb-1 text-3xl text-white sm:hidden"
       >
         +
       </button>
@@ -210,14 +207,15 @@ export const TodoList = ({ userId }: { userId: string }) => {
           </Button>
         </div>
       ) : (
-        <Table>
+        <Table className="overflow-x-auto">
           <TableCaption>A list of your Todos.</TableCaption>
           <TableHeader>
             <TableRow>
               <TableHead className="w-[30px]">Status</TableHead>
               <TableHead>Title</TableHead>
-              <TableHead className="text-right">Created</TableHead>
-              <TableHead className="text-right">Delete</TableHead>
+              {/* Hide the "Created" column and "Delete" column on mobile */}
+              <TableHead className="text-right hidden sm:table-cell">Created</TableHead>
+              <TableHead className="text-right hidden sm:table-cell">Delete</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -238,20 +236,27 @@ export const TodoList = ({ userId }: { userId: string }) => {
                     {todo.title}
                   </div>
                 </TableCell>
-                <TableCell className="text-fg float-right">
+                {/* Hide the "Created" column and "Delete" column on mobile */}
+                <TableCell className="text-fg float-right hidden sm:table-cell">
                   {format(todo.createdAt, "MMMM d, yyyy")}
                 </TableCell>
-                <TableCell>
-                <Button variant={"ghost"} size={'sm'} className={'text-black float-right'} onClick={() => deletefunc(todo)}>
-                  <Trash />
+                <TableCell className="hidden sm:table-cell">
+                  <Button
+                    variant={"ghost"}
+                    size={"sm"}
+                    className={"float-right text-black"}
+                    onClick={() => deletefunc(todo)}
+                  >
+                    <Trash />
                   </Button>
                 </TableCell>
               </TableRow>
             ))}
+            {/* Conditionally render the "+" button only on large screens */}
             <Button
               variant={"link"}
               onClick={() => setShowNewTodoModal(true)}
-              className="text-2xl"
+              className="text-2xl hidden sm:block"
             >
               +
             </Button>
