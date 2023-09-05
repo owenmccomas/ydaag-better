@@ -2,8 +2,6 @@ import { useSession } from "next-auth/react";
 import { format } from "date-fns";
 import WeatherWidget from "./weather";
 import dynamic from "next/dynamic";
-// import { Button } from "./button";
-// import { MainNav } from "./main-nav";
 
 const DynamicDigitalClock = dynamic(() => import("./DigitalClock"), {
   ssr: false,
@@ -11,6 +9,14 @@ const DynamicDigitalClock = dynamic(() => import("./DigitalClock"), {
 
 export default function UserTitle() {
   const user = useSession().data?.user;
+
+  // Function to determine if the screen is small (e.g., mobile)
+  const isMobileScreen = () => {
+    // Replace with the actual breakpoint size you want to use (e.g., 768px)
+    const breakpoint = 385;
+    return window.innerWidth < breakpoint;
+  };
+
   return (
     <>
       <div className="mx-auto flex w-full justify-between">
@@ -27,7 +33,7 @@ export default function UserTitle() {
             <DynamicDigitalClock />
           </p>
         </div>
-        <div className="ml-auto">
+        <div className={`ml-auto ${isMobileScreen() ? "hidden" : ""}`}>
           <WeatherWidget />
         </div>
       </div>
